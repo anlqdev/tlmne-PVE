@@ -120,6 +120,7 @@ class Cell:
         
         if amount > maximum:
             remind(f"{player_name}, bạn không thể di chuyển số quân vượt mức {maximum}")
+            return False
         
         if amount == 0:
             remind(f"{player_name}, bạn không thể di chuyển 0 quân")
@@ -245,6 +246,11 @@ def move(game: Game) -> bool:
     amount: int = int(choice)
     return watching.move_troops(player.name, game.turn, amount, player.supply*100_000, destination)
 
+def sacrifice(game: Game) -> bool:
+    player: Player = game.players[game.turn]
+    player.supply -= 1
+    return True
+
 class Game:
     def __init__(self, player_names: List[str]) -> None:
         self.players: List[Player] = [Player(name) for name in player_names]
@@ -324,6 +330,12 @@ class Game:
             actions: List[Action] = [Action("Ghé thăm địa điểm kế bên (không mất số lượng hành động bạn có thể làm)", self, visit, False), Action("Nâng cấp phòng thủ", self, upgrade_hp), Action("Nâng cấp sát thương", self, upgrade_melee), Action("Nâng cấp hiệu suất", self, upgrade_efficiency), Action("Nâng cấp kinh tế", self, upgrade_economy), Action("Nâng cấp hậu cần", self, upgrade_supply)]
             if self.watching_cell.troops_per_player[self.turn] != 0:
                 actions += [Action("Di chuyển quân tới địa điểm kế bên", self, move)]
+            elif player.troops == 0:
+                if player.supply == 1:
+                    print(f"{self.players[1-self.turn]} đã giành chiến thắng vì đã không thể hiến tế các nâng cấp của mình để đổi lấy quân")
+                    exit(0)
+
+                actions += [Action("Hiến tế một cấp trong hậu cần để đổi lấy quân", self, sacrifice)]
             
             print(f"""Chào mừng {player.name}, bạn hiện đang quan sát vùng đất {self.watching_cell.name}
 
