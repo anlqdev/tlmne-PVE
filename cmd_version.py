@@ -249,6 +249,55 @@ def move(game: Game) -> bool:
 def sacrifice(game: Game) -> bool:
     player: Player = game.players[game.turn]
     player.supply -= 1
+    player.troops = 1_000_000
+    remaining: int = 1_000_000
+    if game.turn == 0:
+        for i in range(3):
+            while True:
+                cls()
+                answer: str = input(f"""{player_names[0]}, đây là bản đồ phòng thủ của bạn:
+                            --- Hà Nội ---
+                            /       |        \\
+                Triệu Sơn 1   Nông Cống 1     Tĩnh Gia 1
+
+        Hãy xếp 1 triệu quân của bạn ở Triệu Sơn 1, Nông Cống 1, và Tĩnh Gia 1, số quân còn lại chưa được xếp sẽ xếp ở Hà Nội
+        Trước tiên, bạn chỉ còn có thể xếp tối đa {remaining} quân, bạn muốn xếp bao nhiêu quân ở {game.capitals[0].paths[i].name}? """).strip()
+                if not answer or not all(char in "0123456789" for char in answer):
+                    remind(f"{player_names[0]}, {answer} không phải là một con số hợp lệ")
+                    continue
+
+                troops: int = int(answer)
+                if troops > remaining:
+                    remind(f"{player_names[0]}, bạn đang không còn đủ quân để xếp ở {game.capitals[0].paths[i].name}")
+                    continue
+
+                game.capitals[0].paths[i].add_troops(0, troops)
+                remaining -= troops
+                break
+    else:
+        for i in range(3):
+            while True:
+                cls()
+                answer: str = input(f"""{player_names[1]}, đây là bản đồ phòng thủ của bạn:
+        Cờ Đỏ 1      Thới Lai 1       Ô Môn 1
+                \\         |         /
+                    ---- Sài Gòn ----
+
+        Hãy xếp 1 triệu quân của bạn ở Cờ Đỏ 1, Thới Lai 1, và Ô Môn 1, số quân còn lại chưa được xếp sẽ xếp ở Sài Gòn
+        Trước tiên, bạn chỉ còn có thể xếp tối đa {remaining} quân, bạn muốn xếp bao nhiêu quân ở {game.capitals[1].paths[i].name}? """).strip()
+                if not answer or not all(char in "0123456789" for char in answer):
+                    remind(f"{player_names[1]}, {answer} không phải là một con số hợp lệ")
+                    continue
+
+                troops: int = int(answer)
+                if troops > remaining:
+                    remind(f"{player_names[1]}, bạn đang không còn đủ quân để xếp ở {game.capitals[1].paths[i].name}")
+                    continue
+
+                game.capitals[1].paths[i].add_troops(1, troops)
+                remaining -= troops
+                break
+    
     return True
 
 class Game:
