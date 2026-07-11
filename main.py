@@ -1,10 +1,10 @@
 from __future__ import annotations
-from os import system
+import os
 from typing import List, Self, Callable
 from sys import exit
 
 def cls() -> None:
-    system("clear")
+    os.system("cls" if os.name == "nt" else "clear")
 
 def petc() -> None:
     input("Nhấn enter để tiếp tục...")
@@ -450,10 +450,10 @@ Bạn hiện có thể thực hiện {self.actions} hành động trong lượt 
 
         self.turn = 1 - self.turn
 
-instruct("Chào mừng các bạn đến với Tiến lên Miền Nam mở rộng")
+instruct("Chào mừng các bạn đến với Tiến lên Miền Nam mở rộng phiên bản đấu với AI\nBản folk thực hiện bởi An.\nMô hình AI: Gemini 3.1 Flash Lite")
 instruct("Trước khi chơi, chúng ta cần phải biết luật chơi của trò này")
 instruct("Đầu tiên, chúng ta cần 2 người chơi")
-player_names: List[str] = instruct("Đầu tiên, chúng ta cần 2 người chơi", ["P1: ", "P2: "])
+player_names: List[str] = instruct("Đầu tiên, chúng ta cần 2 người chơi.\nBạn là người chơi thứ nhất, còn Gemini sẽ là người chơi thứ hai!", ["P1: "]) + ["Gemini"]
 instruct(f"""Chúng ta sẽ chơi trên bản đồ sau:
               --- Hà Nội ---
             /       |        \\
