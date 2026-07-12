@@ -24,6 +24,9 @@ def remind(message: str) -> None:
     print(message)
     petc()
 
+def ask(message: str) -> str:
+    pass
+
 class Player:
     def __init__(self, name: str) -> None:
         self.name: str = name

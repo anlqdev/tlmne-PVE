@@ -2,6 +2,8 @@
 
 Tiến Lên Miền Nam Extended, but now you'll play against AI.
 
+The AI model used is Google Gemini 3.1 Flash Lite.
+
 # Installation
 
 Run the following commands:
