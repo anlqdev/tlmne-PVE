@@ -2,6 +2,10 @@ from __future__ import annotations
 import os
 from typing import List, Self, Callable
 from sys import exit
+from google import genai
+
+client = genai.Client()
+gemini_previous = None
 
 def cls() -> None:
     os.system("cls" if os.name == "nt" else "clear")
@@ -25,7 +29,10 @@ def remind(message: str) -> None:
     petc()
 
 def ask(message: str) -> str:
-    pass
+    global gemini_previous
+    interaction = client.interactions.create(model="gemini-3.1-flash-lite", input=message, previous_interaction_id=gemini_previous)
+    gemini_previous = interaction.id
+    return interaction.output_text
 
 class Player:
     def __init__(self, name: str) -> None:
